@@ -8,7 +8,7 @@ acceptedChars = alfabet.union(numbers)
 lista_de_palavras_reservadas = {'def', 'int', 'float', 'string', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null'}
 
 
-lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', '"'}
+lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', '"', ','}
 
 
 lista_de_tokens = []
@@ -35,7 +35,7 @@ def principal ()
     int C ;
     int D ;
     int R ;
-    C = 4;
+    C = 4.0;
     D = 5;
     R = func1 (C , D );
     return ;
@@ -74,16 +74,15 @@ def analisador_ident(charlist, init, linha):
 def analisador_number_constant(charlist, init):
     if (charlist[init] not in numbers):
         return False, init
-    
-    token = charlist[init]
+
     pointer = init + 1
     while(charlist[pointer] in numbers ):
-        token += charlist[pointer]
         pointer+=1
     if charlist[pointer] == '.':
         pointer+=1
+        if charlist[pointer] not in numbers:
+            return False, init
         while(charlist[pointer] in numbers ):
-            token += charlist[pointer]
             pointer+=1
         lista_de_tokens.append('float_constant')
     else:
@@ -94,17 +93,14 @@ def analisador_number_constant(charlist, init):
 
 def analisador_string_constant(charlist, init):
     if (charlist[init] != '"'):
-        return False, init,
-    return True, init, 
+        return False, init
+    return True, init
 
 
 def analisador(charlist):
     linha = 1
     pointer = 0
-    isIdent = False
-    isNumber = False
-    isString = False
-    isSimbol = False
+    isError = False
     while(1):
         try:
             char = charlist[pointer]
@@ -119,18 +115,17 @@ def analisador(charlist):
                 isString, pointer = analisador_string_constant(charlist, pointer)
                 if not isString:
                     isSimbol = (charlist[pointer] in lista_de_simbolos)
-                    pointer += 1
                     if isSimbol:
                         lista_de_tokens.append(charlist[pointer])
-        
-        if char == ' ':
-            pointer+=1
-        if char == '\n':
-            linha+=1
-            pointer+=1
-        if isIdent and not isNumber and not isString and not isSimbol and charlist[pointer] != ' ' and charlist[pointer] != '\n':
-            print(isIdent, isNumber, isSimbol, isString)
-            print(charlist[pointer])
+                        pointer += 1
+                    elif charlist[pointer] == ' ':
+                        pointer+=1
+                    elif char == '\n':
+                        linha+=1
+                        pointer+=1
+                    else:
+                        isError = True
+        if isError:
             print('Erro Léxico na linha '+ str(linha))
             return True
 
