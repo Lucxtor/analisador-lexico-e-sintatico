@@ -1,3 +1,5 @@
+import sys
+
 alfabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 numbers = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 
@@ -144,44 +146,23 @@ def analisador(charlist):
         if isError:
             print('Erro Léxico na linha '+ str(linha))
             return True
+        
+file_path = sys.argv[1]
 
-haveError = analisador(codigo)
+try:
+    with open(file_path, 'r') as file:
+            codigo = file.read()
+            if codigo:
+                haveError = analisador(codigo)
 
-if not haveError:
-    print()
-    print(lista_de_tokens)
-    print()
-    print(tabela_de_simbolos)
+                if not haveError:
+                    print()
+                    print(lista_de_tokens)
+                    print()
+                    print(tabela_de_simbolos)
+            
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# file_path = 'arquivo.lcc'
-
-
-
-
-# try:
-#     with open(file_path, 'r') as file:
-#         while True:
-#             char = file.read()
-#             if not char:
-#                 break
-           
-#             analisador_ident(char, 0)
-# except FileNotFoundError:
-#     print(f"File '{file_path}' not found.")
-# except Exception as e:
-#     print(f"An error occurred: {e}")
+except FileNotFoundError:
+    print(f"File '{file_path}' not found.")
+except Exception as e:
+    print(f"An error occurred: {e}")
