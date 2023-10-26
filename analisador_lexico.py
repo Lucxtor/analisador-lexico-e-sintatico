@@ -8,7 +8,7 @@ acceptedChars = alfabet.union(numbers)
 lista_de_palavras_reservadas = {'def', 'int', 'float', 'string', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null'}
 
 
-lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', '"', ','}
+lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', ','}
 
 
 lista_de_tokens = []
@@ -35,6 +35,8 @@ def principal ()
     int C ;
     int D ;
     int R ;
+    string T;
+    T = "uma string"; 
     C = 4.0;
     D = 5;
     R = func1 (C , D );
@@ -94,7 +96,16 @@ def analisador_number_constant(charlist, init):
 def analisador_string_constant(charlist, init):
     if (charlist[init] != '"'):
         return False, init
-    return True, init
+    
+    pointer = init + 1
+    while(charlist[pointer] != '"' and charlist[pointer] != '\n'):
+        pointer += 1
+        
+    if charlist[pointer] == '"':
+        lista_de_tokens.append('string_constant')
+        end = pointer + 1
+        return True, end
+    return False, init
 
 
 def analisador(charlist):
