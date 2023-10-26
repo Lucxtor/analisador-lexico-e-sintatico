@@ -39,6 +39,7 @@ def principal ()
     T = "uma string"; 
     C = 4.0;
     D = 5;
+    C = -1;
     R = func1 (C , D );
     return ;
 }'''
@@ -74,10 +75,14 @@ def analisador_ident(charlist, init, linha):
     return True, end
 
 def analisador_number_constant(charlist, init):
-    if (charlist[init] not in numbers):
+    pointer = init
+    if (charlist[pointer] in ['+', '-']):
+        pointer += 1
+
+    if (charlist[pointer] not in numbers):
         return False, init
 
-    pointer = init + 1
+    pointer += 1
     while(charlist[pointer] in numbers ):
         pointer+=1
     if charlist[pointer] == '.':
