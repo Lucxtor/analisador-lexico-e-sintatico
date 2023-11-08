@@ -38,3 +38,25 @@
   return;
 }
 }
+
+
+
+
+int fibonacci() { 
+  int t1 = 0, t2 = 1, nextTerm = 0, n;
+  print ("Enter a positive number: ");
+
+
+  print ("Fibonacci Series: ");
+  nextTerm = t1 + t2;
+
+  while (nextTerm <= n) {
+    print(nextTerm);
+    t1 = t2;
+    t2 = nextTerm;
+    nextTerm = t1 + t2;
+  }
+
+  return 0;
+}
+1abobabdo
