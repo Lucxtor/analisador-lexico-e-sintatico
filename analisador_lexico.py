@@ -1,4 +1,5 @@
 import sys
+import csv
 
 # to call this file, use : py analisador_lexico.py arquivo.lcc
 
@@ -155,13 +156,19 @@ try:
     with open(file_path, 'r') as file:
             codigo = file.read()
             if codigo:
-                haveError = analisador(codigo + " ")
+                haveError = analisador("id + id" + " ")
 
                 if not haveError:
                     print()
                     print(lista_de_tokens)
                     print()
                     print(tabela_de_simbolos)
+    
+    file_path_tokens = 'lista_tokens.csv'
+    
+    with open(file_path_tokens, 'w') as file:
+        for token in lista_de_tokens:
+            file.write(token + '\n')
             
 
 except FileNotFoundError:

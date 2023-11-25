@@ -18,8 +18,14 @@ for i, row in enumerate(tabela):
 
 terminais = []
 
+file_path_tokens = 'lista_tokens.csv'
 
-lista = ['id', '+', 'id']
+# Ler a lista de tokens do arquivo CSV
+with open(file_path_tokens, 'r') as file:
+    lista = [line.strip() for line in file]
+
+print(lista)
+#lista = ['id', '+', 'id']
 #lista = ['def', 'ident', '(', 'int', 'ident', ')', '{', 'int', 'ident', ';', 'ident', '=', 'ident', '+', 'ident', ';', 'return', 'ident', ';', '}']
 
 lista.reverse()
