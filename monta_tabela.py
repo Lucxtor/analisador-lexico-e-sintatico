@@ -198,9 +198,6 @@ for producoes in gramatica:
                 simbolos = firsts[1]
                 break
 
-        if producoes[0] == 'ALLOCEXPRESSION':
-            pass
-
         # Obtem as colunas e insere as produções na tabela
         coluna = 0
         for simbolo in simbolos:
@@ -222,7 +219,6 @@ for producoes in gramatica:
                     coluna = tabela_sintatica[0].index(simbolo_follow)
                     if(tabela_sintatica[linha][coluna] != []):
                         print(tabela_sintatica[linha][coluna])
-                        print(producoes)
                         raise Exception("ambigua")
                     tabela_sintatica[linha][coluna] = producao
 
