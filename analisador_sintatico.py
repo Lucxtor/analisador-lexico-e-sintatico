@@ -46,7 +46,7 @@ while variavel != '$':
         pilha.pop()
         variavel = pilha[-1]
     elif variavel in terminais:
-        raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} =*> (uma ou mais transições) {simbolo}') 
+        raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} -+> (uma ou mais transições) {simbolo}') 
     else:
         coluna = tabela[0].index(simbolo)
         linha = 0
@@ -55,7 +55,7 @@ while variavel != '$':
                 linha = tabela.index(linhas)
                 break
         if tabela[linha][coluna] == []:
-            raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} =*> (uma ou mais transições) {simbolo}') 
+            raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} -+> (uma ou mais transições) {simbolo}') 
         else:
             aux = tabela[linha][coluna].copy()
             print(variavel, ' -> ', ' '.join(aux))
