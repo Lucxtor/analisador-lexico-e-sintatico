@@ -151,8 +151,6 @@ lista_follows = [
     ["LVALUE'", ['=', '*', '/', '%', '+', '-', ']', ')', ';', '<', '>', '<=', '>=', '==', '!=']],
 ]
 
-#, 'int_constant', 'float_constant', 'string_constant', 'ident', 'return',
-
 # gramatica = [['E', [["T", "E'"]]],
 #              ["E'", [["+", "T", "E'"], ['EPSILON']]],
 #              ['T', [["F", "T'"]]],
@@ -175,6 +173,8 @@ lista_follows = [
 #                  ['F', ["*", "+", "$", ")"]]
 #                 ]
 
+
+# Monta a tabela sintatica vazia apenas com os tokens finais e não finais
 tabela_sintatica = [['', 'def', 'ident', 'call', 'int', 'float', 'string', 'int_constant', 'float_constant', 'string_constant', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null', '(', ')', '{', '}', ';', '=', '<', '>', '<=', '>=', '==', '!=', '[', ']', '*', '+', '-', '/', '%', ',', '$']]
 linha_tabela = [[] for _ in range(len(tabela_sintatica[0]))]
 

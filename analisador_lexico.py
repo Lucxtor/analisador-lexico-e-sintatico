@@ -1,7 +1,7 @@
 import sys
 import csv
 
-# to call this file, use : py analisador_lexico.py arquivo.lcc
+# to call this file, use : py analisador_lexico.py arquivo1.lcc
 
 alfabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 numbers = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
@@ -24,34 +24,7 @@ tabela_de_simbolos = []
 
 haveError = False
 
-
-
-codigo = '''def func1 ( int A , int B )
-{
-    int SM [2];
-    SM [0] = A + B ;
-    SM [1] = B * C ;
-    return ;
-}
-
-
-def principal ()
-{
-    int C ;
-    int D ;
-    int R ;
-    string T;
-    T = "uma string"; 
-    C = 4.0;
-    D = 5;
-    C = -1;
-    R = func1 (C , D );
-    return ;
-}'''
-
-
-
-
+# Essa função identifica ident, palavras reservadas e contribui para a montagem da lista de tokens e da lista de simbolos
 def analisador_ident(charlist, init, linha):
     if (charlist[init] not in alfabet):
         return False, init
@@ -79,6 +52,7 @@ def analisador_ident(charlist, init, linha):
     end = pointer
     return True, end
 
+# Essa função identifica números inteiro ou de ponto flutuante com apenas 1 (um) . (ponto) 
 def analisador_number_constant(charlist, init):
     pointer = init
     if (charlist[pointer] in ['+', '-']):
@@ -103,6 +77,7 @@ def analisador_number_constant(charlist, init):
     end = pointer
     return True, end
 
+# Essa função identifica string_constants em uma unica linha
 def analisador_string_constant(charlist, init):
     if (charlist[init] != '"'):
         return False, init
@@ -117,7 +92,7 @@ def analisador_string_constant(charlist, init):
         return True, end
     return False, init
 
-
+# Utiliza os analisadores acima para realizar a análise léxica completa do código lido
 def analisador(charlist):
     linha = 1
     pointer = 0

@@ -1,6 +1,9 @@
 import csv
 from ast import literal_eval
 
+# to call this file, use : py analisador_sintatico.py
+
+
 file_path = 'tabela_sintatica.csv'
 
 # Ler a tabela do arquivo CSV
@@ -24,9 +27,6 @@ file_path_tokens = 'lista_tokens.csv'
 with open(file_path_tokens, 'r') as file:
     lista = [line.strip() for line in file]
 
-#lista = ['id', '+', 'id']
-#lista = ['def', 'ident', '(', 'int', 'ident', ')', '{', 'int', 'ident', ';', 'ident', '=', 'ident', '+', 'ident', ';', 'return', 'ident', ';', '}']
-
 lista.append('$')
 
 pilha = ['$', 'PROGRAM']
@@ -38,15 +38,22 @@ variavel = pilha[-1]
 while variavel != '$':
     simbolo = lista[pointer]
 
+    # Se o topo da pilha for igual a entrada desempilha e consome a entrada
     if variavel == simbolo:
         pilha.pop()
         pointer += 1
         variavel = pilha[-1]
+    
+    # Se o topo da pilha for igual EPSILON desempilha
     elif variavel == 'EPSILON':
         pilha.pop()
         variavel = pilha[-1]
+
+    # Se o topo da pilha é terminal e não corresponde a entrada aponta erro
     elif variavel in terminais:
         raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} -+> (uma ou mais transições) {simbolo}') 
+    
+    # Encontra na tabela a produção correspondente para a entrada a partir do topo da pilha
     else:
         coluna = tabela[0].index(simbolo)
         linha = 0
@@ -54,8 +61,12 @@ while variavel != '$':
             if linhas[0] == variavel:
                 linha = tabela.index(linhas)
                 break
+
+        # Se não houver produção para essa combinação de topo da pilha e entrada aponta erro
         if tabela[linha][coluna] == []:
             raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} -+> (uma ou mais transições) {simbolo}') 
+        
+        # Exibe a produção, desempilha a cabeça e empilha a cauda da produção
         else:
             aux = tabela[linha][coluna].copy()
             print(variavel, ' -> ', ' '.join(aux))
@@ -64,5 +75,6 @@ while variavel != '$':
             pilha += aux
             variavel = pilha[-1]
 
+# Se não der Erros então Sucesso!
 print('Sucesso!')
 
