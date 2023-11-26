@@ -24,7 +24,6 @@ file_path_tokens = 'lista_tokens.csv'
 with open(file_path_tokens, 'r') as file:
     lista = [line.strip() for line in file]
 
-print(lista)
 #lista = ['id', '+', 'id']
 #lista = ['def', 'ident', '(', 'int', 'ident', ')', '{', 'int', 'ident', ';', 'ident', '=', 'ident', '+', 'ident', ';', 'return', 'ident', ';', '}']
 
@@ -32,7 +31,7 @@ lista.reverse()
 
 lista.append('$')
 
-pilha = ['$', 'E']
+pilha = ['$', 'PROGRAM']
 
 pointer = 0
 
@@ -61,7 +60,7 @@ while variavel != '$':
             raise Exception(f'O simbolo encontrado na entrada é {simbolo} porém, a variavel no topo da pilha é {variavel} logo, não existe {variavel} =*> (uma ou mais transições) {simbolo}') 
         else:
             aux = tabela[linha][coluna].copy()
-            print(variavel, ' -> ', ''.join(aux))
+            print(variavel, ' -> ', ' '.join(aux))
             pilha.pop()
             aux.reverse()
             pilha += aux
