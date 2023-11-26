@@ -1,6 +1,12 @@
 import csv
 from ast import literal_eval
 
+# P2 Compiladores (INE5622) 2023.2 
+# Grupo - Thundercats - Alunos:
+# Bruno Garbatzki Madeira Cunha (19202601)
+# Luis Felipe Fabiane (21106213)
+# Lívia Silva Marques (18200638)
+
 # to call this file, use : py analisador_sintatico.py
 
 
