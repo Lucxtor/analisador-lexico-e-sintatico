@@ -16,7 +16,7 @@ for i, row in enumerate(tabela):
         except (ValueError, SyntaxError):
             pass
 
-terminais = []
+terminais = ['def', 'ident', 'int', 'float', 'string', 'int_constant', 'float_constant', 'string_constant', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null', '(', ')', '{', '}', ';', '=', '<', '>', '<=', '>=', '==', '!=', '[', ']', '*', '+', '-', '/', '%', ',', '$']
 
 file_path_tokens = 'lista_tokens.csv'
 
@@ -26,8 +26,6 @@ with open(file_path_tokens, 'r') as file:
 
 #lista = ['id', '+', 'id']
 #lista = ['def', 'ident', '(', 'int', 'ident', ')', '{', 'int', 'ident', ';', 'ident', '=', 'ident', '+', 'ident', ';', 'return', 'ident', ';', '}']
-
-lista.reverse()
 
 lista.append('$')
 
@@ -68,9 +66,3 @@ while variavel != '$':
 
 print('Sucesso!')
 
-
-
-#while lista[len(lista) - 1] != '$':
- #   print(lista[len(lista) - 1])
-  #  lista.pop()
-    
