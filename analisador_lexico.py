@@ -137,8 +137,17 @@ def analisador(charlist):
                 if not isString:
                     isSimbol = (charlist[pointer] in lista_de_simbolos)
                     if isSimbol:
-                        lista_de_tokens.append(charlist[pointer])
-                        pointer += 1
+                        if charlist[pointer] in ['<', '>', '=', '!']:
+                            if charlist[pointer+1] == '=':
+                                token = charlist[pointer] + charlist[pointer+1]
+                                lista_de_tokens.append(token)
+                                pointer += 2
+                            else:
+                                lista_de_tokens.append(charlist[pointer])
+                                pointer += 1    
+                        else:
+                            lista_de_tokens.append(charlist[pointer])
+                            pointer += 1
                     elif charlist[pointer] == ' ':
                         pointer+=1
                     elif char == '\n':
@@ -156,7 +165,7 @@ try:
     with open(file_path, 'r') as file:
             codigo = file.read()
             if codigo:
-                haveError = analisador("id + id" + " ")
+                haveError = analisador(codigo + " ")
 
                 if not haveError:
                     print()
