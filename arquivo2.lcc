@@ -1,0 +1,112 @@
+def add(int A, int B)
+{
+    result = A + B;
+    return ;
+}
+
+def subtract(int A, int B)
+{
+    result = A - B;
+    return ;
+}
+
+def multiply(int A, int B)
+{
+    result = A * B;
+    return ;
+}
+
+def divide(int A, int B)
+{
+    if (B != 0)
+    {
+        result = A / B;
+        return ;
+    }
+    else
+    {
+        print "Error: Division by zero\n";
+        return ;
+    }
+}
+
+
+def calculateHypotenuse(int side1, int side2)
+{
+    float hypotenuse;
+    hypotenuse = side1 * side1 + side2 * side2;
+    print "Hypotenuse (Pythagorean theorem): %f\n" ;
+    return ;
+}
+
+def calculateTriangleArea(int base, int height)
+{
+    float result;
+    result = 0.5 * base * height;
+    return ;
+}
+
+def calculateCircleCircumference(int radius)
+{
+    float result;
+    result = 2 * MPI * radius;
+    return ;
+}
+
+def complexCalculation(int X, int Y)
+{
+    int result1;
+    result1 = call add(X, Y);
+    int result2;
+    result2 = call subtract(X, Y);
+    int result3;
+    result3 = call multiply(X, Y);
+    float result4;
+    result4 = call divide(X, Y);
+
+    print "Result 1: %d\n" ;
+    print "Result 2: %d\n" ;
+    print "Result 3: %d\n" ;
+    print "Result 4: %f\n" ;
+
+    return ;
+}
+
+def initializeAndCalculate()
+{
+    int D;
+    D = 5;
+    
+    int sum;
+    sum = call add(C, D);
+
+    int difference ;
+    difference = call subtract(C, D);
+
+    int product;
+    product = call multiply(C, D);
+    
+    float quotient;
+    quotient = call divide(C, D);
+
+    print "Sum: %d\n" ;
+    print "Difference: %d\n";
+    print "Product: %d\n";
+    print "Quotient: %f\n";
+}
+
+def principal()
+{
+    print "Enter a value for C: ";
+    read C;
+
+    result = call initializeAndCalculate();
+
+    calc = call complexCalculation(C);
+}
+
+def main()
+{
+    Result = call principal();
+    return ;
+}
