@@ -10,7 +10,7 @@ numbers = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 acceptedChars = alfabet.union(numbers)
 
 
-lista_de_palavras_reservadas = {'def', 'int', 'float', 'string', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null'}
+lista_de_palavras_reservadas = {'def', 'call', 'int', 'float', 'string', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null'}
 
 
 lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', ','}

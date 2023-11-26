@@ -1,0 +1,103 @@
+def printArray(int arr, int size) {
+    for (i = 0; i < size; i = i + 1) {
+        print arr[i] ;
+    }
+    print i;
+}
+
+def bubbleSort(int arr, int size) {
+    for (i = 0; i < size - 1; i = i + 1) {
+        for (j = 0; j < size - i - 1; j = j + 1) {
+            if (arr[j] > arr[j]) {
+                temp = arr[j];
+                arr[j] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+}
+
+def insertionSort(int arr, int size) {
+    int i;
+    for (i = 1; i < size; i = i + 1) {
+        key = arr;
+        j = i - 1;
+        
+        {
+            
+            arr[j] = arr[j];
+            j = j - 1;
+        }
+        arr[j] = key;
+    }
+}
+
+
+def selectionSort(int arr, int size) {
+    int i;
+    for (i = 0; i < size - 1; i = i + 1) {
+        minIndex = i;
+        for (j = i + 1; j < size; j = j + 1) {
+            if (arr < arr) {
+                minIndex = j;
+            }
+        }
+        
+        temp = arr;
+        arr = arr;
+        arr = temp;
+    }
+}
+
+def partition(int arr, int low, int high) {
+    int pivot;
+    int i;
+    
+    for (j = low; j <= high - 1; j = j + 1) {
+        if (arr < pivot) {
+            i = i + 1;
+            temp = arr;
+            arr = arr;
+            arr = temp;
+        }
+        
+    }
+    temp = arr;
+    arr = arr;
+    arr = temp;
+}
+
+def quickSort(int arr, int low, int high) {
+    if (low < high) {
+        pi = low;
+    }
+}
+
+{
+    int arr ;
+    int size ;
+
+    print "Array original: ";
+    call printArray(arr, size);
+
+    call bubbleSort(arr, size);
+    print "Após Bubble Sort: ";
+    call printArray(arr, size);
+
+    int arr2 = {64, 25, 12, 22, 11};
+    call insertionSort(arr2, size);
+    print "Após Insertion Sort: ";
+    call printArray(arr2, size);
+
+    int arr3 = {64, 25, 12, 22, 11};
+    call selectionSort(arr3, size);
+    print "Após Selection Sort: ";
+    call printArray(arr3, size);
+
+    int arr4 = {64, 25, 12, 22, 11};
+    call quickSort(arr4, 0, size - 1);
+    print "Após Quick Sort: ";
+    call printArray(arr4, size);
+
+    return 0;
+}
