@@ -12,7 +12,7 @@ gramatica = [
     ["VARDECL'", [["EPSILON"], ["[", "int_constant", "]", "VARDECL'"]]],
     ["ATRIBSTAT", [["LVALUE", "=", "A'"]]],
     ["A'", [["EXPRESSION"], ["NEW"], ["FUNCCALL"]]],
-    ["FUNCCALL", [["ident", "(", "PARAMLISTCALL", ")"]]],
+    ["FUNCCALL", [["call", "ident", "(", "PARAMLISTCALL", ")"]]],
     ["PARAMLISTCALL", [["ident", "C'"], ["EPSILON"]]],
     ["C'", [[",", "PARAMLISTCALL"], ["EPSILON"]]],
     ["PRINTSTAT", [["print", "EXPRESSION"]]],
@@ -24,8 +24,8 @@ gramatica = [
     ["STATELIST", [["STATEMENT", "S'"]]],
     ["S'", [["STATELIST"], ["EPSILON"]]],
     ["NEW", [["new", "ALLOCEXPRESSION"]]],
-    ["ALLOCEXPRESSION", ["int", "ALLOCEXPRESSION'"], ["float", "ALLOCEXPRESSION'"], ["string", "ALLOCEXPRESSION'"]],
-    ["ALLOCEXPRESSION'", ["[", "NUMEXPRESSION", "]", "L'"]],
+    ["ALLOCEXPRESSION", [["int", "ALLOCEXPRESSION'"], ["float", "ALLOCEXPRESSION'"], ["string", "ALLOCEXPRESSION'"]]],
+    ["ALLOCEXPRESSION'", [["[", "NUMEXPRESSION", "]", "L'"]]],
     ["L'", [["ALLOCEXPRESSION'"], ["EPSILON"]]],
     ["EXPRESSION", [["NUMEXPRESSION", "EXPRESSION'"]]],
     ["EXPRESSION'", [["<", "NUMEXPRESSION"], [">", "NUMEXPRESSION"], ["<=", "NUMEXPRESSION"], [">=", "NUMEXPRESSION"], ["==", "NUMEXPRESSION"], ["!=", "NUMEXPRESSION"], ["EPSILON"]]],
@@ -67,7 +67,7 @@ lista_firsts = [
     [['EXPRESSION'], ['+', '-', 'int_constant', 'float_constant', 'string_constant', 'null', '(', 'ident']],
     [['NEW'], ['new']],
     [['new', 'ALLOCEXPRESSION'], ['new']],
-    [['FUNCCALL'], ['ident']],
+    [['FUNCCALL'], ['call']],
     [['ident', '(', 'PARAMLISTCALL', ')'], ['ident']],
     [['ident', "C'"], ['ident']],
     [[',', 'PARAMLISTCALL'], [',']],
@@ -131,7 +131,7 @@ lista_follows = [
     ["READSTAT", [';']],
     ["RETURNSTAT", [';']],
     ["IFSTAT", ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read', 'else', '}', '$']],
-    ["I'", ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read', 'else', '}', '$']],
+    ["I'", ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read', '}', '$']],
     ["FORSTAT", ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read', 'else', '}', '$']],
     ["STATELIST", ['}']],
     ["S'", ['}']],
@@ -140,15 +140,15 @@ lista_follows = [
     ["ALLOCEXPRESSION'", [';', ')']],
     ["L'", [';', ')']],
     ["EXPRESSION", [';', ')']],
-    ["EXPRESSION'", [';']],
+    ["EXPRESSION'", [';', ')']],
     ["NUMEXPRESSION", [']', ')']],
-    ["NUMEXPRESSION'", [']', ')', ';', '<=', '>=', '==', '!=']],
+    ["NUMEXPRESSION'", [']', ')', ';', '<', '>', '<=', '>=', '==', '!=']],
     ["TERM", ['+', '-', ']', ')']],
-    ["TERM'", ['+', '-', ']', ')', ';', '<=', '>=', '==', '!=']],
+    ["TERM'", ['+', '-', ']', ')', ';', '<', '>', '<=', '>=', '==', '!=']],
     ["UNARYEXPR", ['*', '/', '%', '+', '-', ']', ')']],
     ["FACTOR", ['*', '/', '%', '+', '-', ']', ')']],
     ["LVALUE", ['=', '*', '/', '%', '+', '-', ']', ')']],
-    ["LVALUE'", ['=', '*', '/', '%', '+', '-', ']', ')', ';', '<=', '>=', '==', '!=']],
+    ["LVALUE'", ['=', '*', '/', '%', '+', '-', ']', ')', ';', '<', '>', '<=', '>=', '==', '!=']],
 ]
 
 # gramatica = [['E', [["T", "E'"]]],
@@ -173,7 +173,7 @@ lista_follows = [
 #                  ['F', ["*", "+", "$", ")"]]
 #                 ]
 
-tabela_sintatica = [['', 'def', 'ident', 'int', 'float', 'string', 'int_constant', 'float_constant', 'string_constant', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null', '(', ')', '{', '}', ';', '=', '<', '>', '<=', '>=', '==', '!=', '[', ']', '*', '+', '-', '/', '%', ',', '$']]
+tabela_sintatica = [['', 'def', 'ident', 'call', 'int', 'float', 'string', 'int_constant', 'float_constant', 'string_constant', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null', '(', ')', '{', '}', ';', '=', '<', '>', '<=', '>=', '==', '!=', '[', ']', '*', '+', '-', '/', '%', ',', '$']]
 linha_tabela = [[] for _ in range(len(tabela_sintatica[0]))]
 
 for var in gramatica:
@@ -198,11 +198,17 @@ for producoes in gramatica:
                 simbolos = firsts[1]
                 break
 
+        if producoes[0] == 'ALLOCEXPRESSION':
+            pass
+
         # Obtem as colunas e insere as produções na tabela
         coluna = 0
         for simbolo in simbolos:
             if simbolo != 'EPSILON':
                 coluna = tabela_sintatica[0].index(simbolo)
+                if(tabela_sintatica[linha][coluna] != []):
+                    print(tabela_sintatica[linha][coluna])
+                    raise Exception("ambigua")
                 tabela_sintatica[linha][coluna] = producao
             else:
                 # Em caso de epsilon Obtem a lista de Follows da variavel
@@ -214,6 +220,10 @@ for producoes in gramatica:
                 # Obtem a coluna dos simbolos follow e insere a produção na tabela
                 for simbolo_follow in simbolos_follow:
                     coluna = tabela_sintatica[0].index(simbolo_follow)
+                    if(tabela_sintatica[linha][coluna] != []):
+                        print(tabela_sintatica[linha][coluna])
+                        print(producoes)
+                        raise Exception("ambigua")
                     tabela_sintatica[linha][coluna] = producao
 
         
