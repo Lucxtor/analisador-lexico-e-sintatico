@@ -1,40 +1,148 @@
 import csv
 
-lista_de_palavras_reservadas = {'def', 'int', 'float', 'string', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null'}
+gramatica = [
+    ["PROGRAM", [["STATEMENT"], ["FUNCLIST"], ["EPSILON"]]],
+    ["FUNCLIST", [["FUNCDEF", "F'"]]],
+    ["F'", [["EPSILON"], ["FUNCLIST"]]],
+    ["FUNCDEF", [["def", "ident", "(", "PARAMLIST", ")", "{", "STATELIST", "}"]]],
+    ["PARAMLIST", [["int", "ident", "P'"], ["float", "ident", "P'"], ["string", "ident", "P'"], ["EPSILON"]]],
+    ["P'", [[",", "PARAMLIST"], ["EPSILON"]]],
+    ["STATEMENT", [["VARDECL", ";"], ["ATRIBSTAT", ";"], ["PRINTSTAT", ";"], ["READSTAT", ";"], ["RETURNSTAT", ";"], ["IFSTAT"], ["FORSTAT"], ["{", "STATELIST", "}"], ["break", ";"], [";"]]],
+    ["VARDECL", [["int", "ident", "VARDECL'"], ["float", "ident", "VARDECL'"], ["string", "ident", "VARDECL'"]]],
+    ["VARDECL'", [["EPSILON"], ["[", "int_constant", "]", "VARDECL'"]]],
+    ["ATRIBSTAT", [["LVALUE", "=", "A'"]]],
+    ["A'", [["EXPRESSION"], ["NEW"], ["FUNCCALL"]]],
+    ["FUNCCALL", [["ident", "(", "PARAMLISTCALL", ")"]]],
+    ["PARAMLISTCALL", [["ident", "C'"], ["EPSILON"]]],
+    ["C'", [[",", "PARAMLISTCALL"], ["EPSILON"]]],
+    ["PRINTSTAT", [["print", "EXPRESSION"]]],
+    ["READSTAT", [["read", "LVALUE"]]],
+    ["RETURNSTAT", [["return"]]],
+    ["IFSTAT", [["if", "(", "EXPRESSION", ")", "STATEMENT", "I'"]]],
+    ["I'", [["else", "STATEMENT"], ["EPSILON"]]],
+    ["FORSTAT", [["for", "(", "ATRIBSTAT", ";", "EXPRESSION", ";", "ATRIBSTAT", ")", "STATEMENT"]]],
+    ["STATELIST", [["STATEMENT", "S'"]]],
+    ["S'", [["STATELIST"], ["EPSILON"]]],
+    ["NEW", [["new", "ALLOCEXPRESSION"]]],
+    ["ALLOCEXPRESSION", ["int", "ALLOCEXPRESSION'"], ["float", "ALLOCEXPRESSION'"], ["string", "ALLOCEXPRESSION'"]],
+    ["ALLOCEXPRESSION'", ["[", "NUMEXPRESSION", "]", "L'"]],
+    ["L'", [["ALLOCEXPRESSION'"], ["EPSILON"]]],
+    ["EXPRESSION", [["NUMEXPRESSION", "EXPRESSION'"]]],
+    ["EXPRESSION'", [["<", "NUMEXPRESSION"], [">", "NUMEXPRESSION"], ["<=", "NUMEXPRESSION"], [">=", "NUMEXPRESSION"], ["==", "NUMEXPRESSION"], ["!=", "NUMEXPRESSION"], ["EPSILON"]]],
+    ["NUMEXPRESSION", [["TERM", "NUMEXPRESSION'"]]],
+    ["NUMEXPRESSION'", [["+", "TERM", "NUMEXPRESSION'"], ["-", "TERM", "NUMEXPRESSION'"], ["EPSILON"]]],
+    ["TERM", [["UNARYEXPR", "TERM'"]]],
+    ["TERM'", [["*", "UNARYEXPR", "TERM'"], ["/", "UNARYEXPR", "TERM'"], ["%", "UNARYEXPR", "TERM'"], ["EPSILON"]]],
+    ["UNARYEXPR", [["+", "FACTOR"], ["-", "FACTOR"], ["FACTOR"]]],
+    ["FACTOR", [["int_constant"], ["float_constant"], ["string_constant"], ["null"], ["LVALUE"], ["(", "NUMEXPRESSION", ")"]]],
+    ["LVALUE", [["ident", "LVALUE'"]]],
+    ["LVALUE'", [["[", "NUMEXPRESSION", "]", "LVALUE'"], ["EPSILON"]]],
+]
 
-lista_de_simbolos = {'(', ')', '{', '}', ';', '<', '>', '=', '!', '[', ']', '*', '+', '-', '/', '%', ','}
+lista_firsts = [
+    [['STATEMENT'], ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read']],
+    [['FUNCLIST'], ['def']],
+    [['EPSILON'], ['EPSILON']],
+    [['FUNCDEF', "F'"], ['def']],
+    [['def', 'ident', '(', 'PARAMLIST', ')', '{', 'STATELIST', '}'], ['def']],
+    [['int', 'ident', "P'"], ['int']],
+    [['float', 'ident', "P'"], ['float']],
+    [['string', 'ident', "P'"], ['string']],
+    [[',', 'PARAMLIST'], [',']],
+    [['VARDECL', ';'], ['int', 'float', 'string']],
+    [['ATRIBSTAT', ';'], ['ident']],
+    [['PRINTSTAT', ';'], ['print']],
+    [['READSTAT', ';'], ['read']],
+    [['RETURNSTAT', ';'], ['return']],
+    [['IFSTAT'], ['if']],
+    [['FORSTAT'], ['for']],
+    [['{', 'STATELIST', '}'], ['{']],
+    [['break', ';'], ['break']],
+    [[';'], [';']],
+    [['int', 'ident', 'VARDECL\''], ['int']],
+    [['float', 'ident', 'VARDECL\''], ['float']],
+    [['string', 'ident', 'VARDECL\''], ['string']],
+    [['[', 'int_constant', ']', 'VARDECL\''], ['[']],
+    [['LVALUE', '=', 'A\''], ['ident']],
+    [['EXPRESSION'], ['+', '-', 'int_constant', 'float_constant', 'string_constant', 'null', '(', 'ident']],
+    [['NEW'], ['new']],
+    [['new', 'ALLOCEXPRESSION'], ['new']],
+    [['FUNCCALL'], ['ident']],
+    [['ident', '(', 'PARAMLISTCALL', ')'], ['ident']],
+    [['ident', "C'"], ['ident']],
+    [[',', 'PARAMLISTCALL'], [',']],
+    [['print', 'EXPRESSION'], ['print']],
+    [['read', 'LVALUE'], ['read']],
+    [['return'], ['return']],
+    [['if', '(', 'EXPRESSION', ')', 'STATEMENT', "I'"], ['if']],
+    [['else', 'STATEMENT'], ['else']],
+    [['for', '(', 'ATRIBSTAT', ';', 'EXPRESSION', ';', 'ATRIBSTAT', ')', 'STATEMENT'], ['for']],
+    [['STATEMENT', "S'"], ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read']],
+    [['STATELIST'], ['{', 'break', ';', 'int', 'float', 'string', 'print', 'return', 'for', 'ident', 'if', 'read']],
+    [['int', 'ALLOCEXPRESSION\''], ['int']],
+    [['float', 'ALLOCEXPRESSION\''], ['float']],
+    [['string', 'ALLOCEXPRESSION\''], ['string']],
+    [['[', 'NUMEXPRESSION', ']', "L'"], ['[']],
+    [["ALLOCEXPRESSION'"], ['[']],
+    [['NUMEXPRESSION', "EXPRESSION'"], ['+', '-', 'int_constant', 'float_constant', 'string_constant', 'null', '(', 'ident']],
+    [['<', 'NUMEXPRESSION'], ['<']],
+    [['>', 'NUMEXPRESSION'], ['>']],
+    [['<=', 'NUMEXPRESSION'], ['<=']],
+    [['>=', 'NUMEXPRESSION'], ['>=']],
+    [['==', 'NUMEXPRESSION'], ['==']],
+    [['!=', 'NUMEXPRESSION'], ['!=']],
+    [['TERM', "NUMEXPRESSION'"], ['+', '-', 'int_constant', 'float_constant', 'string_constant', 'null', '(', 'ident']],
+    [['+', 'TERM', "NUMEXPRESSION'"], ['+']],
+    [['-', 'TERM', "NUMEXPRESSION'"], ['-']],
+    [['UNARYEXPR', 'TERM\''], ['+', '-', 'int_constant', 'float_constant', 'string_constant', 'null', '(', 'ident']],
+    [['*', 'UNARYEXPR', 'TERM\''], ['*']],
+    [['/', 'UNARYEXPR', 'TERM\''], ['/']],
+    [['%', 'UNARYEXPR', 'TERM\''], ['%']],
+    [['+', 'FACTOR'], ['+']],
+    [['-', 'FACTOR'], ['-']],
+    [['FACTOR'], ['int_constant', 'float_constant', 'string_constant', 'null', 'ident', '(']],
+    [['int_constant'], ['int_constant']],
+    [['float_constant'], ['float_constant']],
+    [['string_constant'], ['string_constant']],
+    [['null'], ['null']],
+    [['LVALUE'], ['[']],
+    [['(', 'NUMEXPRESSION', ')'], ['(']],
+    [['ident', "LVALUE'"], ['ident']],
+    [['[', 'NUMEXPRESSION', ']', "LVALUE'"], ['[']],
+]
 
-lista_de_terminais = ['id', '+', '*', '(', ')', '$']
 
-gramatica = [['E', [["T", "E'"]]],
-             ["E'", [["+", "T", "E'"], ['EPSILON']]],
-             ['T', [["F", "T'"]]],
-             ["T'", [["*", "F", "T'"], ['EPSILON']]],
-             ['F', [["(", "E", ")"], ['id']]]
-            ]
+lista_follows = []
 
-lista_firsts = [[['EPSILON'], ['EPSILON']],
-                [["T", "E'"], ['(', 'id']], 
-                [["+", "T", "E'"], ['+']], 
-                [["F", "T'"], ['(', 'id']], 
-                [["*", "F", "T'"], ['*']],
-                [["(", "E", ")"], ['(']],
-                [['id'], ['id']]]
+# gramatica = [['E', [["T", "E'"]]],
+#              ["E'", [["+", "T", "E'"], ['EPSILON']]],
+#              ['T', [["F", "T'"]]],
+#              ["T'", [["*", "F", "T'"], ['EPSILON']]],
+#              ['F', [["(", "E", ")"], ['id']]]
+#             ]
 
-lista_follows = [['E', ["$", ")"]],
-                 ["E'", ["$", ")"]],
-                 ['T', ["+", "$", ")"]],
-                 ["T'", ["+", "$", ")"]],
-                 ['F', ["*", "+", "$", ")"]]
-                ]
+# lista_firsts = [[['EPSILON'], ['EPSILON']],
+#                 [["T", "E'"], ['(', 'id']], 
+#                 [["+", "T", "E'"], ['+']], 
+#                 [["F", "T'"], ['(', 'id']], 
+#                 [["*", "F", "T'"], ['*']],
+#                 [["(", "E", ")"], ['(']],
+#                 [['id'], ['id']]]
 
-tabela_sintatica = [['',    'id',   '+',    '*',    '(',    ')',    '$'],
-                    ['E',   [],     [],     [],     [],     [],     [],],
-                    ["E'",  [],     [],     [],     [],     [],     [],],
-                    ['T',   [],     [],     [],     [],     [],     [],],
-                    ["T'",  [],     [],     [],     [],     [],     [],],
-                    ['F',   [],     [],     [],     [],     [],     [],]
-                   ]
+# lista_follows = [['E', ["$", ")"]],
+#                  ["E'", ["$", ")"]],
+#                  ['T', ["+", "$", ")"]],
+#                  ["T'", ["+", "$", ")"]],
+#                  ['F', ["*", "+", "$", ")"]]
+#                 ]
+
+tabela_sintatica = [['', 'def', 'ident', 'int', 'float', 'string', 'int_constant', 'float_constant', 'string_constant', 'break', 'print', 'read', 'return', 'if', 'else', 'for', 'new', 'null', '(', ')', '{', '}', ';', '<', '>', '<=', '>=', '==', '!=', '[', ']', '*', '+', '-', '/', '%', ',', '$']]
+linha_tabela = [[] for _ in range(len(tabela_sintatica[0]))]
+
+for var in gramatica:
+    linha_tabela[0] = var[0]
+    tabela_sintatica.append(linha_tabela.copy())
+    
 
 for producoes in gramatica:
     for producao in producoes[1]:
