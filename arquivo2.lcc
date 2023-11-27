@@ -19,10 +19,10 @@ def multiply(int A, int B)
 def divide(int A, int B)
 {
     if (B != 0)
-    {
+    {{
         result = A / B;
         return ;
-    }
+    }}
     else
     {
         print "Error: Division by zero\n";

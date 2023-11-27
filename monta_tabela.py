@@ -26,7 +26,7 @@ gramatica = [
     ["PRINTSTAT", [["print", "EXPRESSION"]]],
     ["READSTAT", [["read", "LVALUE"]]],
     ["RETURNSTAT", [["return"]]],
-    ["IFSTAT", [["if", "(", "EXPRESSION", ")", "{" "STATEMENT", "}", "IFSTAT2"]]],
+    ["IFSTAT", [["if", "(", "EXPRESSION", ")", "{", "STATEMENT", "}", "IFSTAT2"]]],
     ["IFSTAT2", [["else", "STATEMENT"], ["EPSILON"]]],
     ["FORSTAT", [["for", "(", "ATRIBSTAT", ";", "EXPRESSION", ";", "ATRIBSTAT", ")", "STATEMENT"]]],
     ["STATELIST", [["STATEMENT", "STATELIST2"]]],
@@ -123,7 +123,7 @@ lista_firsts = [
 lista_follows = [
     ["PROGRAM", ['$']],
     ["FUNCLIST", ['$']],
-    ["FUNCLIST2", ['$']],
+    ["FUNCLIST2", ['$', '{']],
     ["FUNCDEF", ['def', '$']],
     ["PARAMLIST", [')']],
     ["PARAMLIST2", [')']],

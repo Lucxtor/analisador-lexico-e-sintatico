@@ -8,11 +8,11 @@ def printArray(int arr, int size) {
 def bubbleSort(int arr, int size) {
     for (i = 0; i < size - 1; i = i + 1) {
         for (j = 0; j < size - i - 1; j = j + 1) {
-            if (arr[j] > arr[j]) {
+            if (arr[j] > arr[j]) {{
                 temp = arr[j];
                 arr[j] = arr[j];
                 arr[j] = temp;
-            }
+            }}
         }
     }
 }
@@ -54,12 +54,12 @@ def partition(int arr, int low, int high) {
     int i;
     
     for (j = low; j <= high - 1; j = j + 1) {
-        if (arr < pivot) {
+        if (arr < pivot) {{
             i = i + 1;
             temp = arr;
             arr = arr;
             arr = temp;
-        }
+        }}
         
     }
     temp = arr;
